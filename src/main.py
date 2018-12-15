@@ -1,6 +1,6 @@
 import pymongo
 from pymongo import MongoClient
-
+from flask import jsonify
 from flask import Flask 
 app = Flask(__name__)
 
@@ -13,7 +13,7 @@ def index():
 
 @app.route('/example/')
 def example():
-    return({'hello': 'world'})
+    return jsonify({'hello': 'world'})
 
 
 if __name__=='__main__':
