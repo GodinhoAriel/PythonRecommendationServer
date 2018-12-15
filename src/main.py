@@ -19,6 +19,11 @@ def test():
 	db = client.server
 	user = db.users.find_one({'id' : '12152580425'})
 	return user
+	
+@app.route('/example/')
+def example():
+    return {'hello': 'world'}
+
 
 if __name__=='__main__':
 	# This is used when running locally only. When deploying to Google App
