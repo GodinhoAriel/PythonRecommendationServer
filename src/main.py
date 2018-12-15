@@ -10,7 +10,7 @@ app = Flask(__name__)
 def index():
 	return "Hello World"
 
-@app.route('/temperature', methods=['GET'])
+@app.route('/test')
 def temperature():
 	client = MongoClient('mongodb://musicclustering:o5oF111QxnPaMXmk@clustermdb-shard-00-00-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-01-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-02-gg5i3.gcp.mongodb.net:27017/test?ssl=true&replicaSet=ClusterMDB-shard-0&authSource=admin&retryWrites=true')
 	db = client.server
