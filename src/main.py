@@ -1,4 +1,3 @@
-import sys
 import pymongo
 from pymongo import MongoClient
 
