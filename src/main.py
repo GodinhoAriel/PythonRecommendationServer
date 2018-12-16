@@ -13,7 +13,26 @@ def index():
 
 @app.route('/example/')
 def example():
-    return jsonify({'hello': 'world'})
+    return jsonify(
+    	{ 
+        "salas": [
+            {
+                "id": 1,
+                "nome": "Churrasco casa do ariel",
+                "id_anfitriao": "U1"
+            },
+            {
+                "id": 2,
+                "nome": "Ouvindo no CEE",
+                "id_anfitriao": "U2"
+            },
+            {
+                "id": 3,
+                "nome": "Ano novo na praia",
+                "id_anfitriao": "U3"
+            }
+        ]
+    })
 
 
 if __name__=='__main__':
