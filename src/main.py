@@ -9,27 +9,27 @@ def index():
 	# client = MongoClient('mongodb://musicclustering:o5oF111QxnPaMXmk@clustermdb-shard-00-00-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-01-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-02-gg5i3.gcp.mongodb.net:27017/test?ssl=true&replicaSet=ClusterMDB-shard-0&authSource=admin&retryWrites=true')
 	# db = client.server
 	# user = db.users.find_one({'id' : '12152580425'})
-	return("done")
+	return('done')
 
 @app.route('/example/')
 def example():
     return jsonify(
     	{ 
-        "salas": [
+        'salas': [
             {
-                "id": 1,
-                "nome": "Churrasco casa do ariel",
-                "id_anfitriao": "U1"
+                'id': 1,
+                'nome': 'Churrasco casa do ariel',
+                'id_anfitriao': 'U1'
             },
             {
-                "id": 2,
-                "nome": "Ouvindo no CEE",
-                "id_anfitriao": "U2"
+                'id': 2,
+                'nome': 'Ouvindo no CEE',
+                'id_anfitriao': 'U2'
             },
             {
-                "id": 3,
-                "nome": "Ano novo na praia",
-                "id_anfitriao": "U3"
+                'id': 3,
+                'nome': 'Ano novo na praia',
+                'id_anfitriao': 'U3'
             }
         ]
     })
