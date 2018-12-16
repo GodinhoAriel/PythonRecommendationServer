@@ -1,8 +1,13 @@
+from flask import jsonify
+from flask import Flask
 import pymongo
 from pymongo import MongoClient
-from flask import jsonify
-from flask import Flask 
+import json
+from bson import ObjectId
+
 app = Flask(__name__)
+client = MongoClient('mongodb://musicclustering:o5oF111QxnPaMXmk@clustermdb-shard-00-00-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-01-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-02-gg5i3.gcp.mongodb.net:27017/test?ssl=true&replicaSet=ClusterMDB-shard-0&authSource=admin&retryWrites=true')
+db = client.server
 
 @app.route('/')
 def index():
@@ -10,6 +15,13 @@ def index():
 	# db = client.server
 	# user = db.users.find_one({'id' : '12152580425'})
 	return('done')
+
+@app.route('/get_user/')
+def get_user():
+	user = db.users.find_one({'id' : '12152580425'})
+	user['_id'] = str(user['_id'])
+	print(user)
+	return jsonify(user)
 
 @app.route('/example/')
 def example():
