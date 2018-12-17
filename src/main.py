@@ -60,6 +60,17 @@ def setup_user():
 		'user_id': user_id
 		})
 
+@app.route('/check_user/', methods = ['POST'])
+def check_user():
+	data = request.json
+	#print(data['token'])
+	(success, user_id, finished_loading) = check_user_status(data['id'])
+	return jsonify({
+		'success': success,
+		'user_id': user_id,		
+	    'finished_loading': finished_loading
+		})
+
 
 
 if __name__=='__main__':

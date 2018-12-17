@@ -81,15 +81,6 @@ def load_artists(user_tracks):
 	print("Unique tracks: ", len(all_tracks))
 	return (all_user_artists, all_tracks)
 
-def save_user(user_id, user_tracks):
-	tracks_ids = [track['id'] for track in user_tracks]
-	document = {
-	    'id': user_id,
-	    'tracks_ids': tracks_ids,
-	    'finished_loading': False
-	}
-	result = db.users.insert_one(document)
-	#save_tracks(user_tracks)
 
 def save_tracks(all_tracks):
 	## MONGODB
@@ -139,6 +130,40 @@ def save_features(all_tracks):
 	print('Tracks without features: ', j)
 
 
+def load_user_relevant_tracks(user_id, user_tracks):
+	# Get artists and all tracks
+	(user_artists, all_tracks) = load_artists(user_tracks)
+	# Get tracks to save
+	all_tracks.extend(user_tracks)
+	id_list = [item['id'] for item in all_tracks]
+	results = db.tracks.find({'id': { '$in': id_list }}, {"id": 1})
+	ids_in_db = [item['id'] for item in list(results)]
+	print('tracks already in DB:', len(ids_in_db))
+	filtered_tracks = [item for item in all_tracks if item['id'] not in ids_in_db]
+	print('tracks not in DB:', len(filtered_tracks))
+	#pp.pprint(filtered_tracks)
+	return
+	save_tracks(filtered_tracks)
+	# Get Features and save
+	save_features(filtered_tracks)
+
+	document = {
+	    'finished_loading': False
+	}
+	db.users.update_one({'id' : user_id}, {"$set": track_item}, upsert=True)
+
+
+def save_user(user_id, user_tracks):
+	tracks_ids = [track['id'] for track in user_tracks]
+	document = {
+	    'id': user_id,
+	    'tracks_ids': tracks_ids,
+	    'finished_loading': False
+	}
+	result = db.users.insert_one(document)
+	#save_tracks(user_tracks)
+
+## CALLS
 def startup_user(token):
 	sp = spotipy.Spotify(auth=token)
 	user = sp.current_user()
@@ -150,16 +175,13 @@ def startup_user(token):
 	user_tracks = authenticate_user(token)
 	# Save user & user tracks
 	save_user(user['id'], user_tracks)
-	thread = Thread(target=load_user_relevant_tracks, args=(user_tracks,))
+	thread = Thread(target=load_user_relevant_tracks, args=(user['id'], user_tracks,))
 	thread.start()
 	return user['id']
 
-def load_user_relevant_tracks(user_tracks):
-	# Get artists and all tracks
-	(user_artists, all_tracks) = load_artists(user_tracks)
-	# Save tracks
-	all_tracks.append(user_tracks)
-	save_tracks(all_tracks)
-	# Get Features and save
-	all_tracks.append(user_tracks)
-	save_features(all_tracks)
+def check_user_status(user_id):
+	user_db = db.users.find_one({'id' : user_id})
+	if(user_db != None):
+		return (True, user_db['id'], user_db['finished_loading'])
+	else:
+		return (False, None, None)
