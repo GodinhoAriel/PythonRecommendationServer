@@ -103,14 +103,18 @@ def room_remove_user():
 		'room': room
 		})
 
-@app.route('/room_get/', methods = ['POST'])
-def room_get():
+@app.route('/room_get_list/', methods = ['GET', 'POST'])
+def room_get_list():
 	data = request.json
-	(success, room, users) = room_room_get(data['room_id'])
+	limit = 20
+	if(data != None and data != {}):
+		limit = data['limit']
+	print(data)
+	print(limit)
+	(success, tuples_room_user) = room_room_get_list(limit)
 	return jsonify({
 		'success': success,
-		'room': room,
-		'users': users
+		'room_list': tuples_room_user
 		})
 
 if __name__=='__main__':

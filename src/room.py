@@ -60,3 +60,20 @@ def room_room_get(room_id):
 			user['_id'] = str(user['_id'])
 		room['_id'] = str(room['_id'])
 		return (True, room, users)
+
+def room_room_get_list(limit):
+	rooms = db.rooms.find({}).sort("last_modification_date", pymongo.DESCENDING).limit(limit)
+	if(rooms == []):
+		return (False, None)
+	else:
+		tuples_room_user = []
+		for room in rooms:
+			users_ids = room['users']
+			users_ids.append(room['owner_id'])
+			results = db.users.find({'id': { '$in': users_ids }}, {'id': 1, 'name': 1, 'image': 1, 'finished_loading': 1})
+			users = list(results)
+			for user in users:
+				user['_id'] = str(user['_id'])
+			room['_id'] = str(room['_id'])
+			tuples_room_user.append({'room': room, 'users': users})
+		return (True, tuples_room_user)
