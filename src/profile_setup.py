@@ -80,27 +80,6 @@ def load_artists(user_tracks):
 	print("Unique tracks: ", len(all_tracks))
 	return (all_user_artists, all_tracks)
 
-
-def startup_user(token):
-	sp = spotipy.Spotify(auth=token)
-	user = sp.current_user()
-	user_db = db.users.find_one({'id' : user['id']})
-
-	# Return if already set up
-	if(user_db != None): return
-	# Get tracks
-	user_tracks = authenticate_user(token)
-	# Save user & user tracks
-	save_user(user['id'], user_tracks)	
-	# Get artists and all tracks
-	(user_artists, all_tracks) = load_artists(user_tracks)
-	# Save tracks
-	save_tracks(all_tracks)
-	# Get Features and save
-	all_tracks.append(user_tracks)
-	save_features(all_tracks)
-
-
 def save_user(user_id, user_tracks):
 	tracks_ids = [track['id'] for track in user_tracks]
 	document = {
@@ -156,3 +135,23 @@ def save_features(all_tracks):
 	    print(i, end='\r')   
 	print(i)
 	print('Tracks without features: ', j)
+
+
+def startup_user(token):
+	sp = spotipy.Spotify(auth=token)
+	user = sp.current_user()
+	user_db = db.users.find_one({'id' : user['id']})
+
+	# Return if already set up
+	# if(user_db != None): return
+	# Get tracks
+	user_tracks = authenticate_user(token)
+	# Save user & user tracks
+	save_user(user['id'], user_tracks)	
+	# Get artists and all tracks
+	(user_artists, all_tracks) = load_artists(user_tracks)
+	# Save tracks
+	save_tracks(all_tracks)
+	# Get Features and save
+	all_tracks.append(user_tracks)
+	save_features(all_tracks)
