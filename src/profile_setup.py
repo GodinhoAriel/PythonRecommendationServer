@@ -142,7 +142,6 @@ def load_user_relevant_tracks(user_id, user_tracks):
 	filtered_tracks = [item for item in all_tracks if item['id'] not in ids_in_db]
 	print('tracks not in DB:', len(filtered_tracks))
 	#pp.pprint(filtered_tracks)
-	return
 	save_tracks(filtered_tracks)
 	# Get Features and save
 	save_features(filtered_tracks)
