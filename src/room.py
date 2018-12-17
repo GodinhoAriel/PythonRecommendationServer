@@ -22,7 +22,7 @@ def _room_create(owner_id, room_name):
 	return (True, room)
 
 
-def room_add_user(user_id, room_id):
+def _room_add_user(user_id, room_id):
 	room = db.rooms.find_one({'_id' : ObjectId(room_id)})
 	if(room == None):
 		return (False, None)
@@ -33,7 +33,7 @@ def room_add_user(user_id, room_id):
 		room = db.rooms.find_one({'_id' : ObjectId(room_id)})
 		return (True, room)
 
-def room_remove_user(user_id, room_id):
+def _room_remove_user(user_id, room_id):
 	room = db.rooms.find_one({'_id' : ObjectId(room_id)})
 	if(room == None):
 		return (False, None)
