@@ -1,6 +1,7 @@
 from flask import jsonify
 from flask import Flask, Response
 from flask import request
+from flask_cors import CORS
 import pymongo
 from pymongo import MongoClient
 import json
@@ -8,6 +9,7 @@ from bson import ObjectId
 from profile_setup import *
 
 app = Flask(__name__)
+CORS(app)
 client = MongoClient('mongodb://musicclustering:o5oF111QxnPaMXmk@clustermdb-shard-00-00-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-01-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-02-gg5i3.gcp.mongodb.net:27017/test?ssl=true&replicaSet=ClusterMDB-shard-0&authSource=admin&retryWrites=true')
 db = client.server
 
