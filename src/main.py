@@ -79,9 +79,7 @@ def check_user():
 @app.route('/room_create/', methods = ['POST'])
 def room_create():
 	data = request.json
-	owner_id = startup_user(data['owner_id'])
-	room_name = startup_user(data['room_name'])
-	(success, room) = _room_create(owner_id, room_name)
+	(success, room) = room_room_create(data['owner_id'], data['room_name'])
 	return jsonify({
 		'success': success,
 		'room': room
@@ -90,9 +88,7 @@ def room_create():
 @app.route('/room_add_user/', methods = ['POST'])
 def room_add_user():
 	data = request.json
-	user_id = startup_user(data['user_id'])
-	room_id = startup_user(data['room_id'])
-	(success, room) = _room_add_user(user_id, room_id)
+	(success, room) = room_room_add_user(data['user_id'], data['room_id'])
 	return jsonify({
 		'success': success,
 		'room': room
@@ -101,19 +97,16 @@ def room_add_user():
 @app.route('/room_remove_user/', methods = ['POST'])
 def room_remove_user():
 	data = request.json
-	user_id = startup_user(data['user_id'])
-	room_id = startup_user(data['room_id'])
-	(success, room) = _room_remove_user(user_id, room_id)
+	(success, room) = room_room_remove_user(data['user_id'], data['room_id'])
 	return jsonify({
 		'success': success,
 		'room': room
 		})
-	
+
 @app.route('/room_get/', methods = ['POST'])
 def room_get():
 	data = request.json
-	room_id = startup_user(data['room_id'])
-	(success, room, users) = _room_get(room_id)
+	(success, room, users) = room_room_get(data['room_id'])
 	return jsonify({
 		'success': success,
 		'room': room,
