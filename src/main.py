@@ -80,9 +80,14 @@ def check_user():
 def room_create():
 	data = request.json
 	(success, room) = room_room_create(data['owner_id'], data['room_name'])
+	user_db = db.users.find_one({'id' : data['owner_id']}, {'id': 1, 'name': 1, 'image': 1, 'finished_loading': 1})
+	image = None
+	if(user_db != None):
+		image = user_db['image']
 	return jsonify({
 		'success': success,
-		'room': room
+		'room': room,
+		'owner_image': image
 		})
 
 @app.route('/room_add_user/', methods = ['POST'])
