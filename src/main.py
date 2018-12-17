@@ -108,6 +108,16 @@ def room_remove_user():
 		'room': room
 		})
 
+@app.route('/room_get/', methods = ['POST'])
+def room_get():
+	data = request.json
+	(success, room, users) = room_room_get(data['room_id'])
+	return jsonify({
+		'success': success,
+		'room': room,
+		'users': users
+		})
+
 @app.route('/room_get_list/', methods = ['GET', 'POST'])
 def room_get_list():
 	data = request.json
