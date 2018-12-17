@@ -1,9 +1,11 @@
 from flask import jsonify
-from flask import Flask
+from flask import Flask, Response
+from flask import request
 import pymongo
 from pymongo import MongoClient
 import json
 from bson import ObjectId
+from profile_setup import *
 
 app = Flask(__name__)
 client = MongoClient('mongodb://musicclustering:o5oF111QxnPaMXmk@clustermdb-shard-00-00-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-01-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-02-gg5i3.gcp.mongodb.net:27017/test?ssl=true&replicaSet=ClusterMDB-shard-0&authSource=admin&retryWrites=true')
@@ -45,6 +47,13 @@ def example():
             }
         ]
     })
+
+@app.route('/setup_user/', methods = ['POST'])
+def setup_user():
+	data = request.json
+	#print(data['token'])
+	startup_user(data['token'])
+	return jsonify({'success': True})
 
 
 if __name__=='__main__':
