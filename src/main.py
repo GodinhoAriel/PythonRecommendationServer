@@ -54,8 +54,12 @@ def example():
 def setup_user():
 	data = request.json
 	#print(data['token'])
-	startup_user(data['token'])
-	return jsonify({'success': True})
+	user_id = startup_user(data['token'])
+	return jsonify({
+		'success': True,
+		'user_id': user_id
+		})
+
 
 
 if __name__=='__main__':

@@ -3,6 +3,7 @@ import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
 import pymongo
+from threading import Thread
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
@@ -84,10 +85,11 @@ def save_user(user_id, user_tracks):
 	tracks_ids = [track['id'] for track in user_tracks]
 	document = {
 	    'id': user_id,
-	    'tracks_ids': tracks_ids
+	    'tracks_ids': tracks_ids,
+	    'finished_loading': False
 	}
 	result = db.users.insert_one(document)
-	save_tracks(user_tracks)
+	#save_tracks(user_tracks)
 
 def save_tracks(all_tracks):
 	## MONGODB
@@ -143,14 +145,20 @@ def startup_user(token):
 	user_db = db.users.find_one({'id' : user['id']})
 
 	# Return if already set up
-	# if(user_db != None): return
+	if(user_db != None): return user['id']
 	# Get tracks
 	user_tracks = authenticate_user(token)
 	# Save user & user tracks
-	save_user(user['id'], user_tracks)	
+	save_user(user['id'], user_tracks)
+	thread = Thread(target=load_user_relevant_tracks, args=(user_tracks,))
+	thread.start()
+	return user['id']
+
+def load_user_relevant_tracks(user_tracks):
 	# Get artists and all tracks
 	(user_artists, all_tracks) = load_artists(user_tracks)
 	# Save tracks
+	all_tracks.append(user_tracks)
 	save_tracks(all_tracks)
 	# Get Features and save
 	all_tracks.append(user_tracks)
