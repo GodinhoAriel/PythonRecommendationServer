@@ -7,6 +7,7 @@ from pymongo import MongoClient
 import json
 from bson import ObjectId
 from profile_setup import *
+from room import *
 
 app = Flask(__name__)
 CORS(app)
@@ -50,6 +51,8 @@ def example():
         ]
     })
 
+## USER SETUP
+
 @app.route('/setup_user/', methods = ['POST'])
 def setup_user():
 	data = request.json
@@ -71,7 +74,51 @@ def check_user():
 	    'finished_loading': finished_loading
 		})
 
+## ROOM CONTROL
 
+@app.route('/room_create/', methods = ['POST'])
+def room_create():
+	data = request.json
+	owner_id = startup_user(data['owner_id'])
+	room_name = startup_user(data['room_name'])
+	(success, room) = _room_create(owner_id, room_name)
+	return jsonify({
+		'success': success,
+		'room': room
+		})
+
+@app.route('/room_add_user/', methods = ['POST'])
+def room_add_user():
+	data = request.json
+	user_id = startup_user(data['user_id'])
+	room_id = startup_user(data['room_id'])
+	(success, room) = _room_add_user(user_id, room_id)
+	return jsonify({
+		'success': success,
+		'room': room
+		})
+
+@app.route('/room_remove_user/', methods = ['POST'])
+def room_remove_user():
+	data = request.json
+	user_id = startup_user(data['user_id'])
+	room_id = startup_user(data['room_id'])
+	(success, room) = _room_remove_user(user_id, room_id)
+	return jsonify({
+		'success': success,
+		'room': room
+		})
+	
+@app.route('/room_get/', methods = ['POST'])
+def room_get():
+	data = request.json
+	room_id = startup_user(data['room_id'])
+	(success, room, users) = _room_get(room_id)
+	return jsonify({
+		'success': success,
+		'room': room,
+		'users': users
+		})
 
 if __name__=='__main__':
 	# This is used when running locally only. When deploying to Google App

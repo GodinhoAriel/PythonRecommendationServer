@@ -147,17 +147,19 @@ def load_user_relevant_tracks(user_id, user_tracks):
 	save_features(filtered_tracks)
 
 	document = {
-	    'finished_loading': False
+	    'finished_loading': True
 	}
-	db.users.update_one({'id' : user_id}, {"$set": track_item}, upsert=True)
+	db.users.update_one({'id' : user_id}, {"$set": document}, upsert=True)
 
 
-def save_user(user_id, user_tracks):
+def save_user(user_id, user_tracks, image, name):
 	tracks_ids = [track['id'] for track in user_tracks]
 	document = {
 	    'id': user_id,
 	    'tracks_ids': tracks_ids,
-	    'finished_loading': False
+	    'finished_loading': False,
+	    'image': image,
+	    'name': name
 	}
 	result = db.users.insert_one(document)
 	#save_tracks(user_tracks)
@@ -173,7 +175,12 @@ def startup_user(token):
 	# Get tracks
 	user_tracks = authenticate_user(token)
 	# Save user & user tracks
-	save_user(user['id'], user_tracks)
+	images = user['images']
+	if(len(images) > 0):
+		image = images[0]
+	else:
+		image = None
+	save_user(user['id'], user_tracks, image, user['display_name'])
 	thread = Thread(target=load_user_relevant_tracks, args=(user['id'], user_tracks,))
 	thread.start()
 	return user['id']
