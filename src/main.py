@@ -138,23 +138,23 @@ def room_get_list():
 # 		'playlist': playlist
 # 		})
 
-# @app.route('/playlist_get/', methods = ['POST', 'GET'])
-# def playlist_get():
-# 	data = request.json
-# 	(success, playlist) = room_room_get_playlist(data['room_id'])	
-# 	return jsonify({
-# 		'success': success,
-# 		'playlist': playlist
-# 		})
+@app.route('/playlist_get/', methods = ['POST', 'GET'])
+def playlist_get():
+	data = request.json
+	(success, playlist) = room_room_get_playlist(data['room_id'])	
+	return jsonify({
+		'success': success,
+		'playlist': playlist
+		})
 
-# @app.route('/playlist_generate_url/', methods = ['POST'])
-# def playlist_generate_url():
-# 	data = request.json
-# 	(success, url) = room_export_playlist(data['user_id'], data['name'], data['room_id'], data['token'])	
-# 	return jsonify({
-# 		'success': success,
-# 		'url': url
-# 		})
+@app.route('/playlist_generate_url/', methods = ['POST'])
+def playlist_generate_url():
+	data = request.json
+	(success, url) = room_export_playlist(data['user_id'], data['name'], data['room_id'], data['token'])	
+	return jsonify({
+		'success': success,
+		'url': url
+		})
 
 if __name__=='__main__':
 	# This is used when running locally only. When deploying to Google App

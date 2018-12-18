@@ -2,7 +2,6 @@ import pprint
 import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from sklearn.cluster import KMeans
 import math
 from music_clustering import *
 from room import *
