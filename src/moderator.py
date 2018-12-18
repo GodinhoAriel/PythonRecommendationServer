@@ -2,8 +2,6 @@ import pprint
 import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-import numpy as np
-import pandas as pd
 from sklearn.cluster import KMeans
 import math
 from music_clustering import *
