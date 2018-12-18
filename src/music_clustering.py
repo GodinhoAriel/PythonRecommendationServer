@@ -1,8 +1,7 @@
 import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-import sklearn
-from sklearn.cluster import KMeans
+from sklearn import *
 import math
 
 client = MongoClient('mongodb://musicclustering:o5oF111QxnPaMXmk@clustermdb-shard-00-00-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-01-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-02-gg5i3.gcp.mongodb.net:27017/test?ssl=true&replicaSet=ClusterMDB-shard-0&authSource=admin&retryWrites=true')
