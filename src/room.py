@@ -9,11 +9,20 @@ from bson.objectid import ObjectId
 client = MongoClient('mongodb://musicclustering:o5oF111QxnPaMXmk@clustermdb-shard-00-00-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-01-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-02-gg5i3.gcp.mongodb.net:27017/test?ssl=true&replicaSet=ClusterMDB-shard-0&authSource=admin&retryWrites=true')
 db = client.server
 
+def room_room_set_playlist(room_id, track_ids):
+	room = db.rooms.find_one({'_id' : ObjectId(room_id)})
+	if(room == None):
+		return False
+	else:
+		db.rooms.update_one({'_id' : ObjectId(room_id)}, {"$set": {'playlist': track_ids, 'last_modification_date': str(datetime.datetime.utcnow())}})
+		return True
+
 def room_room_create(owner_id, room_name):
 	document = {
 		'owner_id': owner_id,
 		'name': room_name,
 		'users': [],
+		'playlist': None,
 		'creation_date': str(datetime.datetime.utcnow()),
 		'last_modification_date': str(datetime.datetime.utcnow())
 	}
@@ -77,3 +86,12 @@ def room_room_get_list(limit):
 			room['_id'] = str(room['_id'])
 			tuples_room_user.append({'room': room, 'users': users})
 		return (True, tuples_room_user)
+
+def room_room_get_playlist(room_id):
+	room = db.rooms.find_one({'_id' : ObjectId(room_id)})
+	if(room == None):
+		return (False, None)
+	else:
+		track_ids = room['playlist'];
+		result = db.tracks.find({'id': { '$in': track_ids }}, {'_id': 0, 'id': 1, 'name': 1, 'artists_names': 1, 'album_image': 1})
+		return (True, list(result))

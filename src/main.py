@@ -8,6 +8,7 @@ import json
 from bson import ObjectId
 from profile_setup import *
 from room import *
+from moderator import *
 
 app = Flask(__name__)
 CORS(app)
@@ -130,6 +131,27 @@ def room_get_list():
 	return jsonify({
 		'success': success,
 		'room_list': tuples_room_user
+		})
+
+## Playlists:
+
+
+@app.route('/playlist_create/', methods = ['POST'])
+def playlist_create():
+	data = request.json
+	(success, playlist) = moderator_generate_playlist(data['room_id'])	
+	return jsonify({
+		'success': success,
+		'playlist': playlist
+		})
+
+@app.route('/playlist_get/', methods = ['POST', 'GET'])
+def playlist_get():
+	data = request.json
+	(success, playlist) = room_room_get_playlist(data['room_id'])	
+	return jsonify({
+		'success': success,
+		'playlist': playlist
 		})
 
 if __name__=='__main__':
