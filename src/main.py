@@ -8,7 +8,6 @@ import json
 from bson import ObjectId
 from profile_setup import *
 from room import *
-from moderator import *
 
 app = Flask(__name__)
 CORS(app)
