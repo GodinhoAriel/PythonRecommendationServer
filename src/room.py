@@ -107,6 +107,6 @@ def room_room_get_playlist(room_id):
 def room_export_playlist(user_id, name, room_id, token):	
 	sp = spotipy.Spotify(auth=token)
 	room = db.rooms.find_one({'_id' : ObjectId(room_id)})
-	playlist = sp.user_playlist_create(user_id, name, public=False, description='Playlist gerada automaicamente.')
+	playlist = sp.user_playlist_create(user_id, name, public=False, description='Playlist gerada automaticamente.')
 	sp.user_playlist_replace_tracks(user=user_id, playlist_id=playlist['id'], tracks=room['playlist'])
 	return (True, playlist['external_urls'])
