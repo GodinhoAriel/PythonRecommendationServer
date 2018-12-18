@@ -85,10 +85,13 @@ def load_artists(user_tracks):
 def save_tracks(all_tracks):
 	## MONGODB
 	for track, i in zip(all_tracks, range(len(all_tracks))):
+		image = None
+		if(len(track['album']['images']) > 0):
+			image = track['album']['images'][0]
 	    track_item = {
 	        'id': track['id'],
 	        'album_id': track['album']['id'],
-	        'album_image': track['album']['images'][0],
+	        'album_image': image,
 	        'artists_ids': [artist['id'] for artist in track['artists']],
 	        'artists_names': [artist['name'] for artist in track['artists']],
 	        'disc_number': track['disc_number'],
