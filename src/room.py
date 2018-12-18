@@ -5,6 +5,7 @@ from threading import Thread
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import spotipy
+import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
 
 ## MONGO DB
