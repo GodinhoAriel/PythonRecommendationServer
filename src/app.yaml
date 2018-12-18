@@ -1,5 +1,7 @@
 runtime: python37
 
+instance_class: F4
+
 resources:
   cpu: 4
   memory_gb: 2.0
