@@ -4,10 +4,18 @@ import pymongo
 from threading import Thread
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 ## MONGO DB
 client = MongoClient('mongodb://musicclustering:o5oF111QxnPaMXmk@clustermdb-shard-00-00-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-01-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-02-gg5i3.gcp.mongodb.net:27017/test?ssl=true&replicaSet=ClusterMDB-shard-0&authSource=admin&retryWrites=true')
 db = client.server
+
+## SPOTIFY CLIENT
+client_credentials_manager = SpotifyClientCredentials(
+	client_id='9c93bd032a4340b086b31bd30ec8f24c',
+	client_secret='b893fd0a51d34e2399effa91c1026de7')
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 def room_room_set_playlist(room_id, track_ids):
 	room = db.rooms.find_one({'_id' : ObjectId(room_id)})
@@ -95,3 +103,10 @@ def room_room_get_playlist(room_id):
 		track_ids = room['playlist'];
 		result = db.tracks.find({'id': { '$in': track_ids }}, {'_id': 0, 'id': 1, 'name': 1, 'artists_names': 1, 'album_image': 1})
 		return (True, list(result))
+
+def room_export_playlist(user_id, name, room_id, token):	
+	sp = spotipy.Spotify(auth=token)
+	room = db.rooms.find_one({'_id' : ObjectId(room_id)})
+	playlist = sp.user_playlist_create(user_id, name, public=False, description='Playlist gerada automaicamente.')
+	sp.user_playlist_replace_tracks(user=user_id, playlist_id=playlist['id'], tracks=room['playlist'])
+	return (True, playlist['external_urls'])

@@ -23,4 +23,3 @@ def moderator_generate_playlist(room_id):
 	(success, playlist) = room_room_get_playlist(room_id)
 	print(playlist)
 	return (success, playlist)
-

@@ -20,14 +20,7 @@ def index():
 	# client = MongoClient('mongodb://musicclustering:o5oF111QxnPaMXmk@clustermdb-shard-00-00-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-01-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-02-gg5i3.gcp.mongodb.net:27017/test?ssl=true&replicaSet=ClusterMDB-shard-0&authSource=admin&retryWrites=true')
 	# db = client.server
 	# user = db.users.find_one({'id' : '12152580425'})
-	return('done')
-
-@app.route('/get_user/')
-def get_user():
-	user = db.users.find_one({'id' : '12152580425'})
-	user['_id'] = str(user['_id'])
-	print(user)
-	return jsonify(user)
+	return('index')
 
 @app.route('/example/')
 def example():
@@ -152,6 +145,15 @@ def playlist_get():
 	return jsonify({
 		'success': success,
 		'playlist': playlist
+		})
+
+@app.route('/playlist_generate_url/', methods = ['POST'])
+def playlist_generate_url():
+	data = request.json
+	(success, url) = room_export_playlist(data['user_id'], data['name'], data['room_id'], data['token'])	
+	return jsonify({
+		'success': success,
+		'url': url
 		})
 
 if __name__=='__main__':
