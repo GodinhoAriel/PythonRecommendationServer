@@ -8,7 +8,7 @@ import json
 from bson import ObjectId
 from profile_setup import *
 from room import *
-# from moderator import *
+from moderator import *
 # from music_clustering import *
 
 app = Flask(__name__)
