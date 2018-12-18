@@ -88,35 +88,35 @@ def save_tracks(all_tracks):
 		image = None
 		if(len(track['album']['images']) > 0):
 			image = track['album']['images'][0]
-	    track_item = {
-	        'id': track['id'],
-	        'album_id': track['album']['id'],
-	        'album_image': image,
-	        'artists_ids': [artist['id'] for artist in track['artists']],
-	        'artists_names': [artist['name'] for artist in track['artists']],
-	        'disc_number': track['disc_number'],
-	        'duration_ms': track['duration_ms'],
-	        'explicit': track['explicit'],
-	        'external_ids': track['external_ids'],
-	        'external_urls': track['external_urls'],
-	        'href': track['href'],
-	        'is_local': track['is_local'],
-	        'name': track['name'],
-	        'popularity': track['popularity'],
-	        'preview_url': track['preview_url'],
-	        'track_number': track['track_number'],
-	        'type': track['type'],
-	        'uri': track['uri'],
-	    }
-	    print(i, end=' \r')
-	    db.tracks.update_one({'id' : track_item['id']}, {"$set": track_item}, upsert=True)
+		track_item = {
+			'id': track['id'],
+			'album_id': track['album']['id'],
+			'album_image': image,
+			'artists_ids': [artist['id'] for artist in track['artists']],
+			'artists_names': [artist['name'] for artist in track['artists']],
+			'disc_number': track['disc_number'],
+			'duration_ms': track['duration_ms'],
+			'explicit': track['explicit'],
+			'external_ids': track['external_ids'],
+			'external_urls': track['external_urls'],
+			'href': track['href'],
+			'is_local': track['is_local'],
+			'name': track['name'],
+			'popularity': track['popularity'],
+			'preview_url': track['preview_url'],
+			'track_number': track['track_number'],
+			'type': track['type'],
+			'uri': track['uri'],
+		}
+		print(i, end=' \r')
+		db.tracks.update_one({'id' : track_item['id']}, {"$set": track_item}, upsert=True)
 
 def save_features(all_tracks):
 	features_list = []
 	print('Loading tracks features...')
 	for index in range(0, len(all_tracks), 100):
-	    features_list.extend(sp.audio_features(tracks=[track['id'] for track in all_tracks[index:index+100]]))
-	    print(len(features_list), end='\r')   
+		features_list.extend(sp.audio_features(tracks=[track['id'] for track in all_tracks[index:index+100]]))
+		print(len(features_list), end='\r')   
 	print(len(features_list))
 	
 	## INSERINDO FEATURES NAS MUSICAS DO BANCO
@@ -124,13 +124,13 @@ def save_features(all_tracks):
 	i = 0
 	j = 0
 	for features in features_list:
-	    i += 1
-	    #pp.pprint(features)
-	    if(features is not None):
-	        bla = db.tracks.update_one({'id' : features['id']}, {"$set": {'features': features}})
-	    else:
-	        j += 1
-	    print(i, end='\r')   
+		i += 1
+		#pp.pprint(features)
+		if(features is not None):
+			bla = db.tracks.update_one({'id' : features['id']}, {"$set": {'features': features}})
+		else:
+			j += 1
+		print(i, end='\r')   
 	print(i)
 	print('Tracks without features: ', j)
 
@@ -152,7 +152,7 @@ def load_user_relevant_tracks(user_id, user_tracks):
 	save_features(filtered_tracks)
 
 	document = {
-	    'finished_loading': True
+		'finished_loading': True
 	}
 	db.users.update_one({'id' : user_id}, {"$set": document}, upsert=True)
 
@@ -160,11 +160,11 @@ def load_user_relevant_tracks(user_id, user_tracks):
 def save_user(user_id, user_tracks, image, name):
 	tracks_ids = [track['id'] for track in user_tracks]
 	document = {
-	    'id': user_id,
-	    'tracks_ids': tracks_ids,
-	    'finished_loading': False,
-	    'image': image,
-	    'name': name
+		'id': user_id,
+		'tracks_ids': tracks_ids,
+		'finished_loading': False,
+		'image': image,
+		'name': name
 	}
 	result = db.users.insert_one(document)
 	#save_tracks(user_tracks)
