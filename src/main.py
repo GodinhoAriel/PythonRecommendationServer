@@ -24,26 +24,26 @@ def index():
 
 @app.route('/example/')
 def example():
-    return jsonify(
-    	{ 
-        'salas': [
-            {
-                'id': 1,
-                'nome': 'Churrasco casa do ariel',
-                'id_anfitriao': 'U1'
-            },
-            {
-                'id': 2,
-                'nome': 'Ouvindo no CEE',
-                'id_anfitriao': 'U2'
-            },
-            {
-                'id': 3,
-                'nome': 'Ano novo na praia',
-                'id_anfitriao': 'U3'
-            }
-        ]
-    })
+	return jsonify(
+		{ 
+		'salas': [
+			{
+				'id': 1,
+				'nome': 'Churrasco casa do ariel',
+				'id_anfitriao': 'U1'
+			},
+			{
+				'id': 2,
+				'nome': 'Ouvindo no CEE',
+				'id_anfitriao': 'U2'
+			},
+			{
+				'id': 3,
+				'nome': 'Ano novo na praia',
+				'id_anfitriao': 'U3'
+			}
+		]
+	})
 
 ## USER SETUP
 
@@ -65,7 +65,7 @@ def check_user():
 	return jsonify({
 		'success': success,
 		'user_id': user_id,		
-	    'finished_loading': finished_loading
+		'finished_loading': finished_loading
 		})
 
 ## ROOM CONTROL
@@ -158,6 +158,6 @@ def playlist_get():
 
 if __name__=='__main__':
 	# This is used when running locally only. When deploying to Google App
-    # Engine, a webserver process such as Gunicorn will serve the app. This
-    # can be configured by adding an `entrypoint` to app.yaml.
-    app.run(host='127.0.0.1', port=8080, debug=True)
+	# Engine, a webserver process such as Gunicorn will serve the app. This
+	# can be configured by adding an `entrypoint` to app.yaml.
+	app.run(host='127.0.0.1', port=8080, debug=True)
