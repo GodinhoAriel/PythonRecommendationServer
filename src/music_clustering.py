@@ -38,40 +38,15 @@ def k_means(values, k):
 	
 	return (centroids, labels, total_distance)
 
-def generate_playlist(centroid, user_id='12152580425', playlist_id='0exKLbWsQeivgmAxRud8XS'):
-	distance_list = []
-	for track in db.tracks.find({'popularity' : {"$gte": min_popularity}}):
-		item = track['features']
-		feature = [
-			item['acousticness'],
-			item['danceability'],
-			item['energy'],
-			item['instrumentalness'],
-			item['liveness'],
-			item['speechiness'],
-			item['valence'],
-		]
-		distance = euclidian_distance(centroid, feature)
-		distance_list.append((distance, track['popularity'], track['id'], track['name']))
-
-	distance_list.sort()
-	for j in range(10):
-		print(j, '-', distance_list[j][0] // 0.001 / 1000, '-', distance_list[j][3])
-
-	# Playlist Creation!
-	sp.user_playlist_replace_tracks(user=user_id, playlist_id=playlist_id, tracks=[item[2] for item in distance_list[0:10]])
-	context_uri='spotify:user:'+user_id+':playlist:'+playlist_id
-	sp.start_playback(context_uri=context_uri)
-
-def standart_deviation(mean, values):
-	sd_vector = []
-	for i in range(len(mean)):
-		d_sum = 0
-		for value in values:
-			d_sum += (mean[i] - value[i]) ** 2
-		sd = math.sqrt(d_sum / (len(values)-1))
-		sd_vector.append(sd)
-	return sd_vector
+# def standart_deviation(mean, values):
+# 	sd_vector = []
+# 	for i in range(len(mean)):
+# 		d_sum = 0
+# 		for value in values:
+# 			d_sum += (mean[i] - value[i]) ** 2
+# 		sd = math.sqrt(d_sum / (len(values)-1))
+# 		sd_vector.append(sd)
+# 	return sd_vector
 
 def generate_recommendation(user, count=100, k=8, min_popularity = 50):
 	# Get user tracks
