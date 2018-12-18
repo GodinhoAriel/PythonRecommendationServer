@@ -105,9 +105,9 @@ def room_room_get_playlist(room_id):
 		result = db.tracks.find({'id': { '$in': track_ids }}, {'_id': 0, 'id': 1, 'name': 1, 'artists_names': 1, 'album_image': 1})
 		return (True, list(result))
 
-# def room_export_playlist(user_id, name, room_id, token):	
-# 	sp = spotipy.Spotify(auth=token)
-# 	room = db.rooms.find_one({'_id' : ObjectId(room_id)})
-# 	playlist = sp.user_playlist_create(user_id, name, public=False, description='Playlist gerada automaticamente.')
-# 	sp.user_playlist_replace_tracks(user=user_id, playlist_id=playlist['id'], tracks=room['playlist'])
-# 	return (True, playlist['external_urls'])
+def room_export_playlist(user_id, name, room_id, token):	
+	sp = spotipy.Spotify(auth=token)
+	room = db.rooms.find_one({'_id' : ObjectId(room_id)})
+	playlist = sp.user_playlist_create(user_id, name, public=False, description='Playlist gerada automaticamente.')
+	sp.user_playlist_replace_tracks(user=user_id, playlist_id=playlist['id'], tracks=room['playlist'])
+	return (True, playlist['external_urls'])
