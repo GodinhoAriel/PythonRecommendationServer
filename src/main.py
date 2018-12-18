@@ -8,8 +8,6 @@ import json
 from bson import ObjectId
 from profile_setup import *
 from room import *
-# from moderator import *
-# from music_clustering import *
 
 app = Flask(__name__)
 CORS(app)
@@ -21,7 +19,14 @@ def index():
 	# client = MongoClient('mongodb://musicclustering:o5oF111QxnPaMXmk@clustermdb-shard-00-00-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-01-gg5i3.gcp.mongodb.net:27017,clustermdb-shard-00-02-gg5i3.gcp.mongodb.net:27017/test?ssl=true&replicaSet=ClusterMDB-shard-0&authSource=admin&retryWrites=true')
 	# db = client.server
 	# user = db.users.find_one({'id' : '12152580425'})
-	return('index')
+	return('done')
+
+@app.route('/get_user/')
+def get_user():
+	user = db.users.find_one({'id' : '12152580425'})
+	user['_id'] = str(user['_id'])
+	print(user)
+	return jsonify(user)
 
 @app.route('/example/')
 def example():
@@ -103,16 +108,6 @@ def room_remove_user():
 		'room': room
 		})
 
-@app.route('/room_get/', methods = ['POST'])
-def room_get():
-	data = request.json
-	(success, room, users) = room_room_get(data['room_id'])
-	return jsonify({
-		'success': success,
-		'room': room,
-		'users': users
-		})
-
 @app.route('/room_get_list/', methods = ['GET', 'POST'])
 def room_get_list():
 	data = request.json
@@ -126,36 +121,6 @@ def room_get_list():
 		'success': success,
 		'room_list': tuples_room_user
 		})
-
-## Playlists:
-
-
-# @app.route('/playlist_create/', methods = ['POST'])
-# def playlist_create():
-# 	data = request.json
-# 	(success, playlist) = moderator_generate_playlist(data['room_id'])	
-# 	return jsonify({
-# 		'success': success,
-# 		'playlist': playlist
-# 		})
-
-# @app.route('/playlist_get/', methods = ['POST', 'GET'])
-# def playlist_get():
-# 	data = request.json
-# 	(success, playlist) = room_room_get_playlist(data['room_id'])	
-# 	return jsonify({
-# 		'success': success,
-# 		'playlist': playlist
-# 		})
-
-# @app.route('/playlist_generate_url/', methods = ['POST'])
-# def playlist_generate_url():
-# 	data = request.json
-# 	(success, url) = room_export_playlist(data['user_id'], data['name'], data['room_id'], data['token'])	
-# 	return jsonify({
-# 		'success': success,
-# 		'url': url
-# 		})
 
 if __name__=='__main__':
 	# This is used when running locally only. When deploying to Google App
